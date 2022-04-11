@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Electron Danmaku</title>
+</head>
+<body>
+  <div id="container"></div>
+  <div id="alert">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="#ff0000"><path d="M0 0h24v24H0z" fill="none"/><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+  </div>
+  <style>
+    #container {
+      width: 100%;
+      height: 80vh;
+      padding: 64px 0;
+      box-sizing: border-box;
+    }
+    body, html {
+      margin: 0;
+    }
+    #alert {
+      position: fixed;
+      bottom: 64px;
+      left: 64px;
+    }
+    #alert.hidden {
+      display: none;
+    }
+  </style>
+  <script type="module">
+  import Danmaku from '../node_modules/danmaku/dist/esm/danmaku.js'
+  const { ipcRenderer } = require('electron')
+
+  const $ = sel => document.querySelector(sel)
+  const danmaku = new Danmaku({ container })
+  danmaku.speed = 180
+  ipcRenderer.on('danmaku', (_e, msg) => {
+    const comment = {
+      text: msg,
+      style: {
+        fontFamily: 'Open Sans, sans-serif',
+        fontSize: '5.75rem',
+        fontWeight: 'bold',
+        color: '#fff',
+        textShadow: '0 0 8px rgba(0, 0, 0, 1)',
+      },
+    }
+    danmaku.emit(comment)
+  })
+  ipcRenderer.on('connected', () => $('#alert').classList.add('hidden'))
+  ipcRenderer.on('error', () => $('#alert').classList.remove('hidden'))
+  </script>
+</body>
+</html>

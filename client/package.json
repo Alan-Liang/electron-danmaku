@@ -1,0 +1,13 @@
+{
+  "name": "client",
+  "version": "0.0.0-dev",
+  "main": "index.js",
+  "repository": "https://github.com/Alan-Liang/electron-danmaku",
+  "author": "Alan Liang",
+  "license": "GPL-3.0",
+  "private": true,
+  "dependencies": {
+    "danmaku": "^2.0.2",
+    "socket.io-client": "^4.4.1"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "name": "server",
+  "version": "0.0.0-dev",
+  "main": "index.mjs",
+  "repository": "https://github.com/Alan-Liang/electron-danmaku",
+  "author": "Alan Liang",
+  "license": "GPL-3.0",
+  "private": true,
+  "dependencies": {
+    "@koa/router": "^10.1.1",
+    "koa": "^2.13.4",
+    "koa-static": "^5.0.0",
+    "nedb": "^1.8.0",
+    "nedb-promise": "^2.0.1",
+    "socket.io": "^4.4.1"
+  }
+}

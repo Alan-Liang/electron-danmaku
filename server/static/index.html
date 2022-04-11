@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danmaku</title>
+  <style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  body {
+    background-color: #f9fcfa;
+    color: #444;
+    padding: 16px;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-family: 'Open Sans', sans-serif;
+  }
+  button, .button {
+    user-select: none;
+    background-color: initial;
+    border: none;
+    outline: none;
+    font-size: initial;
+    cursor: pointer;
+    padding: 0.25em;
+    margin: -0.25em;
+    transition: 0.5s ease background-color;
+    border-radius: 4px;
+    color: inherit;
+    opacity: 0.6;
+  }
+  button:hover, .button:hover, button:focus, .button:focus {
+    background-color: rgba(255, 218, 185, 0.568);
+  }
+  input, textarea {
+    background-color: #f9fcfa;
+    border: 0;
+    outline: none;
+    border-bottom: 1px solid #ccc;
+    transition: 0.5s ease border-bottom-color;
+    color: inherit;
+    font-size: inherit;
+    max-width: calc(100% - 6em);
+  }
+  textarea {
+    height: 1.5rem;
+    font-family: inherit;
+  }
+  input:hover, textarea:hover {
+    border-bottom-color: #999;
+  }
+  input:focus, textarea:focus {
+    border-bottom-color: #444;
+  }
+  ul {
+    list-style: none;
+    max-width: 800px;
+    margin: 16px 0;
+  }
+  li {
+    margin: 8px 0;
+  }
+  .time {
+    opacity: .5;
+  }
+  </style>
+</head>
+<body>
+  <noscript>Danmaku does not work with JavaScript disabled.</noscript>
+  <form id="input-area">
+    <input id="content">
+    <button type="submit" id="submit">发送</button>
+  </form>
+  <ul id="comments"></ul>
+  <script>
+  window.isModernBrowser = `` || true
+  </script>
+  <script>
+  if (!window.isModernBrowser) alert('您的浏览器可能不支持某些新特性，本页面可能无法正常使用')
+  </script>
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+  ; {
+
+  const socket = io()
+  const $ = sel => document.querySelector(sel)
+  const esc = str => {
+    const tmp = document.createElement('p')
+    tmp.textContent = str
+    return tmp.innerHTML
+  }
+  const formatTime = ts => {
+    const date = new Date(ts)
+    const pad = x => x.toString().padStart(2, '0')
+    return `${pad(date.getHours())}:${pad(date.getMinutes())}`
+  }
+  const template = (time, comment) => `
+  <span class="time">${formatTime(time)}</span> ${esc(comment)}
+  `
+  const commentsEl = $('#comments')
+  const contentEl = $('#content')
+  socket.on('comment', ({ time, content }) => {
+    const el = document.createElement('li')
+    el.innerHTML = template(time, content)
+    commentsEl.insertBefore(el, commentsEl.firstChild)
+  })
+  $('#submit').addEventListener('click', e => {
+    e.preventDefault()
+    const value = contentEl.value.trim()
+    if (value.length > 64) alert('太长了')
+    contentEl.value = ''
+    if (!value) return
+    socket.emit('comment', value)
+  })
+
+  }
+  </script>
+</body>
+</html>
