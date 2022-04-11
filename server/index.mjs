@@ -39,6 +39,7 @@ io.on('connection', socket => {
   socket.on('comment', async content => {
     if (typeof content !== 'string') return
     if (content.length === 0) return
+    if (content.includes('yyu')) return
     const id = nextId++
     state[id] = { id, content, time: Date.now() }
     io.emit('comment', state[id])
