@@ -12,8 +12,8 @@
     box-sizing: border-box;
   }
   body {
-    background-color: #f9fcfa;
-    color: #444;
+    background-color: #e6eee9;
+    color: #44444f;
     padding: 16px;
     word-wrap: break-word;
     word-break: break-all;
@@ -111,7 +111,10 @@
   $('#submit').addEventListener('click', e => {
     e.preventDefault()
     const value = contentEl.value.trim()
-    if (value.length > 64) alert('太长了')
+    if (value.length > 64) {
+      alert('太长了')
+      return
+    }
     contentEl.value = ''
     if (!value) return
     socket.emit('comment', value)
